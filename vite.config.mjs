@@ -5,11 +5,14 @@ import { babel } from '@rollup/plugin-babel';
 export default defineConfig({
   plugins: [
     classicEmberSupport(),
-    ember(),
+    ember({ useSymlinks: false }),
     // extra plugins here
     babel({
       babelHelpers: 'runtime',
       extensions,
     }),
   ],
+  server: {
+    middlewareMode: false,
+  },
 });
