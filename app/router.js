@@ -10,4 +10,7 @@ Router.map(function () {
   this.route('scientists');
   this.route('counter');
   this.route('products');
+  this.route('product', {path: '/products/:id'});
+  this.route('login');
+  this.route('authenticated');
 });
