@@ -2,8 +2,8 @@ import ProductCard from './product-card.gjs';
 
 <template>
   {{! DEBUG: Check what @products contains }}
-  {{#if @products}}
-    <p>✅ Products received: {{@products.length}} items</p>
+  {{#if @data.products}}
+    <p>✅ Products received: {{@data.products.length}} items out of {{@data.total}}</p>
   {{else}}
     <p>❌ @products is empty or undefined</p>
   {{/if}}
@@ -13,7 +13,10 @@ import ProductCard from './product-card.gjs';
 
       <ProductCard @product={{product}} />
     {{else}}
-      <h3>No Products found.</h3>
+      <div class="no-products">
+        <h3>No Products Found</h3>
+        <p>Try adjusting your search or browsing all products.</p>
+      </div>
     {{/each}}
   </div>
 
@@ -23,6 +26,12 @@ import ProductCard from './product-card.gjs';
       flex-wrap: wrap;
       gap: 16px;
       padding: 16px;
+    }
+    .no-products {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      width: 100%;
     }
   </style>
 </template>

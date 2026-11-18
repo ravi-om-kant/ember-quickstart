@@ -26,7 +26,7 @@ export default class AppHeaderComponent extends Component {
       <div class="header-right">
         {{#if this.session.isLoggedIn}}
           <span class="user-name">👤 {{this.session.user.firstName}}</span>
-          <button class="btn-logout" {{on "click" this.handleLogout}}>
+          <button class="btn-logout" type="button" {{on "click" this.handleLogout}}>
             🚪 Logout
           </button>
         {{/if}}

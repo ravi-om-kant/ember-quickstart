@@ -1,37 +1,3 @@
-/* eslint-disable warp-drive/no-ext */
-/*
-import Service from '@ember/service';
-import config from '../config/environment';
-
-const BASE = `${config.APP.API_HOST}products`;
-
-export default class ProductRepositoryService extends Service {
-  async list(q) {
-    const url = q ? `${BASE}?q=${encodeURIComponent(q)}` : BASE;
-    const response = await fetch(url);
-    return response.json();
-  }
-
-  async get(id) {
-    const response = await fetch(`${BASE}/${id}`);
-    return response.json();
-  }
-
-  async update(id, changes) {
-    const response = await fetch(`${BASE}/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(changes),
-    });
-    return response.json();
-  }
-
-  async remove(id) {
-    await fetch(`${BASE}/${id}`, { method: 'DELETE' });
-  }
-}
-*/
-
 import Service, { service } from '@ember/service';
 import { SkipCache } from '@warp-drive/core/types/request';
 import config from '../config/environment';
@@ -65,8 +31,12 @@ async function requestWithRetry(store, options) {
 export default class ProductRepositoryService extends Service {
   @service store;
 
-  async list(q) {
-    const url = q ? `${BASE}/search?q=${encodeURIComponent(q)}` : BASE;
+  /**
+   * Search for products by query term
+   * API: /products/search?q=phone
+   */
+  async list(q, limit, skip) {
+    const url = q ? `${BASE}/search?q=${encodeURIComponent(q)}&limit=${limit}&skip=${skip}` : BASE;
     const { content } = await requestWithRetry(this.store, {
       url,
       method: 'GET',
@@ -76,6 +46,25 @@ export default class ProductRepositoryService extends Service {
     return content;
   }
 
+  /**
+   * Get products with pagination
+   * API: /products?limit=10&skip=0
+   */
+  async listWithPagination(limit, skip) {
+    const url = `${BASE}?limit=${limit}&skip=${skip}`;
+    const { content } = await requestWithRetry(this.store, {
+      url,
+      method: 'GET',
+      cacheOptions: RAW,
+      headers: JSON_HEADERS,
+    });
+    return content;
+  }
+
+  /**
+   * Get a single product by ID
+   * API: /products/1
+   */
   async get(id) {
     const { content } = await requestWithRetry(this.store, {
       url: `${BASE}/${id}`,
@@ -85,6 +74,10 @@ export default class ProductRepositoryService extends Service {
     return content;
   }
 
+  /**
+   * Update a product
+   * API: PUT /products/1
+   */
   async update(id, changes) {
     const { content } = await this.store.request({
       url: `${BASE}/${id}`,
@@ -96,6 +89,10 @@ export default class ProductRepositoryService extends Service {
     return content;
   }
 
+  /**
+   * Delete a product
+   * API: DELETE /products/1
+   */
   async remove(id) {
     await this.store.request({
       url: `${BASE}/${id}`,
