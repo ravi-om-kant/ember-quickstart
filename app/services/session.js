@@ -4,9 +4,11 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import config from '../config/environment';
 
-// const BASE = new URL('products', config.APP.API_HOST).href;
+const API_HOST = config.APP.API_HOST.endsWith('/')
+  ? config.APP.API_HOST
+  : `${config.APP.API_HOST}/`;
+const BASE = `${API_HOST}auth`;
 
-const BASE = `${config.APP.API_HOST}/auth`;
 export default class SessionService extends Service {
   @service router;
 
@@ -15,8 +17,6 @@ export default class SessionService extends Service {
   @tracked isLoggedIn = false;
 
   get isAuthenticated() {
-    // return this.user !== null;
-    console.log("isAuthenticated", this.user, this.isLoggedIn)
     return !!this.user;
   }
 
@@ -29,6 +29,8 @@ export default class SessionService extends Service {
   @action
   async loginWithCred(email, pass) {
     try {
+      // Use plain fetch for auth (not products API)
+      // eslint-disable-next-line warp-drive/no-external-request-patterns
       const response = await fetch(`${BASE}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,6 +40,7 @@ export default class SessionService extends Service {
         }),
         credentials: 'include',
       });
+
       if (!response.ok) {
         throw new Error('Login failed');
       }
@@ -63,8 +66,7 @@ export default class SessionService extends Service {
 
       return { success: true, user: this.user };
     } catch (error) {
-      console.error(error);
-      return { success: false, error };
+      return { success: false, error: error.message };
     }
   }
 

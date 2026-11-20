@@ -5,7 +5,7 @@ import { on } from '@ember/modifier';
 
 export default class extends Component {
   @tracked currentPerson;
-  
+
   showPerson = (person) => {
     this.currentPerson = person;
   };
@@ -32,25 +32,20 @@ export default class extends Component {
         {{/if}}
       </li>
     {{/each}}
+    {{yield to="ss"}}
+    <section class="panel">
+      <header>{{yield to="header"}}</header>
+      <div class="body">{{yield}}</div>
+      <footer>{{yield to="footer"}}</footer>
+    </section>
+
+    {{yield to="ss"}}
+    <section>
+      <ol>
+        {{yield to="item"}}
+      </ol>
+    </section>
+
+    {{yield to="ss"}}
   </template>
 }
-
-
-// import Component from '@glimmer/component';
-// import { tracked } from '@glimmer/tracking';
-
-// export default class extends Component{
-//   @tracked isPerson;
-
-//   <template>
-//   {{ yield }}
-
-//   <h2>{{@title}}</h2>
-//   <ol>
-//     {{#each @people as |people|}}
-//       <li>{{people}}</li>
-//     {{/each}}
-//   </ol>
-// </template>
-
-// }

@@ -3,68 +3,97 @@ import Products from '../components/products.gjs';
 import AppHeaderComponent from '../components/appheader.gjs';
 import { on } from '@ember/modifier';
 import { fn, array, eq } from '@ember/helper';
+
 <template>
   {{pageTitle "Products"}}
   <AppHeaderComponent />
 
-  {{outlet}}
   <div class="products-page">
-    <div class="controls">
-      <div class="search-box">
-        <label>Search Products:</label>
-        <input
-          type="text"
-          value={{@controller.q}}
-          {{on "change" @controller.updateQuery}}
-          placeholder="eg. phone, laptop, keyboard..."
-        />
-        {{#if @controller.q}}
-          <button {{on "click" (fn (mut @controller.q) "")}}>Clear</button>
-        {{/if}}
-      </div>
-      {{!-- {{#if (not @controller.hasSearchTerm)}} --}}
-        <div class="pagination-controls">
-          <label>Items per Page:</label>
-          <select
-            value={{@controller.limit}}
-            {{on "change" (fn @controller.updateLimit)}}
-          >
-            {{#each (array 5 10 20 30) as |p|}}
-              <option
-                value={{p}}
-                selected={{eq p @controller.limit}}
-              >{{p}}</option>
-            {{/each}}
-          </select>
-          <button
-            {{on "click" (fn @controller.previousPage)}}
-            disabled={{@controller.isFirstPage}}
-          >← Previous</button>
-          <span class="page-info">
-            Showing
-            {{@controller.rangeStart}}–{{@controller.rangeEnd}}
-          </span>
+        <div class="controls">
+          <div class="search-box">
+            <label>Search Products:</label>
+            <input
+              type="text"
+              value={{@controller.q}}
+              {{on "change" @controller.updateQuery}}
+              placeholder="eg. phone, laptop, keyboard..."
+            />
+            {{#if @controller.q}}
+              <button type="button" {{on "click" (fn (mut @controller.q) "")}}>Clear</button>
+            {{/if}}
+          </div>
+          <div class="pagination-controls">
+            <label>Items per Page:</label>
+            <select
+              value={{@controller.limit}}
+              {{on "change" @controller.updateLimit}}
+            >
+              {{#each (array 5 10 20 30) as |p|}}
+                <option
+                  value={{p}}
+                  selected={{eq p @controller.limit}}
+                >{{p}}</option>
+              {{/each}}
+            </select>
+            <button
+              disabled={{@controller.isFirstPage}} type="button" {{on "click" @controller.previousPage}}
+            >← Previous</button>
+            <span class="page-info">
+              Showing
+              {{@controller.rangeStart}}–{{@controller.rangeEnd}}
+            </span>
 
-          <button
-            type="button"
-            {{on "click" @controller.nextPage}}
-            disabled={{@controller.isLastPage}}
-          >
-            Next →
-          </button>
+            <button
+              type="button"
+              {{on "click" @controller.nextPage}}
+              disabled={{@controller.isLastPage}}
+            >
+              Next →
+            </button>
+          </div>
         </div>
-      {{!-- {{/if}} --}}
-    </div>
-    {{#if @model.error}}
-      <div class="error-box">
-        <h3>⚠️ {{@model.message}}</h3>
-        <p>{{@model.type}}</p>
-      </div>
-    {{else}}
-      <Products @data={{@model}} />
-    {{/if}}
+
+    <Products @products={{@model.products}} />
   </div>
+
   <style>
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      background: #f9f9f9;
+      padding: 2rem;
+      margin: 20px;
+      border-radius: 8px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e0e0e0;
+      border-top: 4px solid #0066cc;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      font-size: 18px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
     .products-page {
       padding: 20px;
     }
@@ -117,21 +146,5 @@ import { fn, array, eq } from '@ember/helper';
       font-weight: bold;
       color: #666;
     }
-
-    .error-box {
-      background: #fee;
-      border: 2px solid #c33;
-      border-radius: 8px;
-      padding: 20px;
-      color: #c33;
-    }
   </style>
 </template>
-// import { helper } from '@ember/component/helper';
-// import config from '../config/environment';
-
-// const getConfig = helper(() => config);
-
-// <template>
-//   {{getConfig.APP.API_HOST}}  // ✅ Parentheses to call it
-// </template>

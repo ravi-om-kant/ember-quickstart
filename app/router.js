@@ -13,4 +13,5 @@ Router.map(function () {
   this.route('product', {path: '/products/:id'});
   this.route('login');
   this.route('authenticated');
+  this.route('tracked-collections');
 });

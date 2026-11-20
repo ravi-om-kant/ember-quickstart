@@ -6,9 +6,7 @@ export default class AuthenticatedRoute extends Route {
   @service router;
 
   beforeModel() {
-    // Check if user is logged in
     if (!this.session.isLoggedIn) {
-      console.log('Not authenticated, redirecting to login');
       this.router.transitionTo('login');
     }
   }

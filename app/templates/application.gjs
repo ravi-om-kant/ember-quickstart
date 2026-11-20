@@ -14,6 +14,7 @@ import { LinkTo } from '@ember/routing';
     <LinkTo @route="counter">Counter</LinkTo>
     <LinkTo @route="products">All Products</LinkTo>
     <LinkTo @route="scientists">Scientists</LinkTo>
+    <LinkTo @route="tracked-collections">Tracked Collection</LinkTo>
   </nav>
   {{outlet}}
 </template>

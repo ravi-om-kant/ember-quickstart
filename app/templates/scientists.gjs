@@ -20,6 +20,17 @@ import HelloComponent from '../components/hello-component';
     @comName="Scientists Component"
     @people={{@model}}
   />
+  <PeopleList @title="Composotion component for list">
+    <:ss><hr/></:ss>
+    <:header><h3>Composition Impl with array of list</h3></:header>
+    <:default><p>default</p></:default>
+    <:item>
+      {{#each @model as |p|}}
+        <li>{{p}}</li>
+      {{/each}}
+    </:item>
+    <:footer><button type="button">OK</button></:footer>
+  </PeopleList>
 
   {{outlet}}
 </template>

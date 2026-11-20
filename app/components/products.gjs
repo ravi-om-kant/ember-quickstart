@@ -1,16 +1,8 @@
 import ProductCard from './product-card.gjs';
 
 <template>
-  {{! DEBUG: Check what @products contains }}
-  {{#if @data.products}}
-    <p>✅ Products received: {{@data.products.length}} items out of {{@data.total}}</p>
-  {{else}}
-    <p>❌ @products is empty or undefined</p>
-  {{/if}}
-
   <div class="products">
-    {{#each @data.products as |product|}}
-
+    {{#each @products as |product|}}
       <ProductCard @product={{product}} />
     {{else}}
       <div class="no-products">

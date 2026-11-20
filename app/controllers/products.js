@@ -30,22 +30,18 @@ export default class ProductsController extends Controller {
 
   @action
   updateQuery(event) {
-    console.log(event.target.value);
     this.q = event.target.value;
     this.skip = 0;
   }
 
   @action
   clearSearch() {
-    console.log('claear');
     this.q = '';
     this.skip = 0;
   }
 
   @action
   updateLimit(event) {
-
-    console.log(event.target.value)
     this.limit = Number(event.target.value);
     this.skip = 0;
   }
@@ -53,14 +49,10 @@ export default class ProductsController extends Controller {
   @action
   nextPage() {
     this.skip = Number(this.skip) + Number(this.limit);
-
-    console.log(this.skip)
   }
 
   @action
   previousPage() {
     this.skip = Math.max(0, Number(this.skip) - Number(this.limit));
-    console.log(this.skip);
-
   }
 }
